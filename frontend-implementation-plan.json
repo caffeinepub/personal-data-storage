@@ -1,0 +1,215 @@
+{
+  "kind": "implementation_plan",
+  "version": "1.0",
+  "title": "Google Photos-style Media Gallery App with 1000TB Storage",
+  "requirements": [
+    {
+      "id": "REQ-1",
+      "summary": "Redesign the app UI to look and feel like Google Photos with full-width responsive grid gallery, date-grouped sections, top navigation bar, and section navigation",
+      "acceptanceCriteria": [
+        "The home screen shows a masonry or uniform grid of uploaded photos and videos",
+        "Photos and videos are grouped by date (e.g., 'Today', 'June 2025')",
+        "Top bar contains app logo/name and a search input",
+        "Navigation allows switching between Gallery, Albums, and Library sections"
+      ],
+      "file_operations": [
+        {
+          "path": "frontend/src/App.tsx",
+          "operation": "modify",
+          "description": "Replace the current FileManagerDashboard with a new PhotoGalleryView component. Keep the AuthProvider wrapper and authentication flow but swap the main content area to render the Google Photos-style interface instead of the file manager."
+        },
+        {
+          "path": "frontend/src/components/PhotoGalleryView.tsx",
+          "operation": "create",
+          "description": "Create the main gallery view component that renders a full-width responsive grid of media thumbnails grouped by date sections. Include top navigation bar with the app logo (use the generated photovault-logo.dim_128x128.png from frontend/public/assets/generated/) and search input. Add bottom or side navigation for Gallery, Albums, and Library sections. Use the blob-storage component's ExternalBlob.getDirectURL() method to display thumbnails. Verify the component's usage instructions before implementing."
+        },
+        {
+          "path": "frontend/src/components/TopNavigationBar.tsx",
+          "operation": "create",
+          "description": "Create a sticky top navigation bar component containing the PhotoVault logo (frontend/public/assets/generated/photovault-logo.dim_128x128.png), app name, and a search input field. Include user profile menu and settings access in the top-right corner. Style with white background, subtle shadow, and pink/teal accent colors matching Google Photos aesthetic."
+        },
+        {
+          "path": "frontend/src/components/SectionNavigation.tsx",
+          "operation": "create",
+          "description": "Create a navigation component with tabs or buttons for Gallery, Albums, and Library sections. Position it below the top bar or as a side rail. Highlight the active section and use smooth transitions on hover."
+        },
+        {
+          "path": "frontend/src/components/MediaGrid.tsx",
+          "operation": "create",
+          "description": "Create a responsive masonry or uniform grid component that displays media thumbnails. Group media by date with section headers (e.g., 'Today', 'June 2025'). Each thumbnail should show a preview using ExternalBlob.getDirectURL() for images and videos. Use the blob-storage component to access media URLs. Verify the component's usage instructions before implementing."
+        },
+        {
+          "path": "frontend/src/components/DateGroupHeader.tsx",
+          "operation": "create",
+          "description": "Create a date section header component that displays formatted date labels (e.g., 'Today', 'Yesterday', 'June 2025') above grouped media items in the grid."
+        }
+      ]
+    },
+    {
+      "id": "REQ-2",
+      "summary": "Support photo and video file uploads with progress indicator and thumbnail display in gallery grid",
+      "acceptanceCriteria": [
+        "User can upload image files (jpg, png, gif, webp, heic) and video files (mp4, mov, avi, mkv)",
+        "A progress bar or spinner appears during upload",
+        "Uploaded photos appear as thumbnails in the grid immediately after upload"
+      ],
+      "file_operations": [
+        {
+          "path": "frontend/src/components/MediaUploadButton.tsx",
+          "operation": "create",
+          "description": "Create an upload button component that accepts image and video files. Use ExternalBlob.fromBytes() to create blob objects and ExternalBlob.withUploadProgress() to track upload progress. Display a progress bar or spinner during upload. Call the backend saveFileReference method with the blob, file name, size, and MIME type. Invalidate media queries after successful upload. Use the blob-storage component for file uploads. Verify the component's usage instructions before implementing."
+        },
+        {
+          "path": "frontend/src/components/UploadProgressIndicator.tsx",
+          "operation": "create",
+          "description": "Create a progress indicator component that displays upload progress percentage and file name during media uploads. Show a circular spinner or linear progress bar styled to match the Google Photos theme."
+        },
+        {
+          "path": "frontend/src/hooks/useMediaUpload.ts",
+          "operation": "create",
+          "description": "Create a custom hook that manages the media upload flow: reading files, creating ExternalBlob instances with progress tracking, calling the backend saveFileReference function, and invalidating the media list cache. Return upload state, progress, and error handling. Use the blob-storage component's ExternalBlob class. Verify the component's usage instructions before implementing."
+        },
+        {
+          "path": "frontend/src/components/PhotoGalleryView.tsx",
+          "operation": "modify",
+          "description": "Wire in the MediaUploadButton component, typically as a floating action button (FAB) in the bottom-right corner of the gallery view. Ensure it integrates with the MediaGrid to refresh thumbnails after upload."
+        }
+      ]
+    },
+    {
+      "id": "REQ-3",
+      "summary": "Open full-screen lightbox/modal viewer when thumbnail is clicked with navigation, metadata display, and video playback",
+      "acceptanceCriteria": [
+        "Clicking a thumbnail opens a full-screen overlay",
+        "Images render at full resolution; videos have playback controls",
+        "Left/right arrow navigation moves between media items",
+        "File metadata (name, date, size) is shown in the viewer"
+      ],
+      "file_operations": [
+        {
+          "path": "frontend/src/components/MediaLightbox.tsx",
+          "operation": "create",
+          "description": "Create a full-screen lightbox modal component that displays media at full resolution. For images, use ExternalBlob.getDirectURL() to render the image. For videos, embed a video player with controls using the same direct URL. Include left/right arrow navigation to move between media items. Display file metadata (name, date, size) in an overlay. Add a close button to exit the lightbox. Use the blob-storage component's direct URL access. Verify the component's usage instructions before implementing."
+        },
+        {
+          "path": "frontend/src/components/MediaMetadataOverlay.tsx",
+          "operation": "create",
+          "description": "Create an overlay component that displays file metadata (name, upload date, size) within the lightbox. Style it to appear at the bottom or side of the viewer with subtle transparency."
+        },
+        {
+          "path": "frontend/src/components/MediaGrid.tsx",
+          "operation": "modify",
+          "description": "Add click handlers to each thumbnail that open the MediaLightbox component with the selected media item. Pass the current media index and full media list to support navigation between items."
+        },
+        {
+          "path": "frontend/src/hooks/useMediaNavigation.ts",
+          "operation": "create",
+          "description": "Create a custom hook that manages lightbox state, current media index, and keyboard/button navigation (previous/next). Support arrow key navigation and boundary checks (first/last item)."
+        }
+      ]
+    },
+    {
+      "id": "REQ-4",
+      "summary": "Add multi-select mode with contextual action bar for Download, Share, Copy, and Delete operations on selected items",
+      "acceptanceCriteria": [
+        "Long-press or checkbox click enters multi-select mode",
+        "Selected items show a visible checkmark overlay",
+        "A floating action bar appears with Download, Share, Copy, and Delete options",
+        "Download triggers a file download for each selected item",
+        "Share copies a link/identifier to the clipboard",
+        "Delete prompts confirmation before removing selected files"
+      ],
+      "file_operations": [
+        {
+          "path": "frontend/src/components/MediaGrid.tsx",
+          "operation": "modify",
+          "description": "Add multi-select mode support to the grid. Display checkboxes on thumbnails when multi-select mode is active. Track selected media items in component state. Show a checkmark overlay on selected thumbnails. Support long-press or checkbox click to enter multi-select mode."
+        },
+        {
+          "path": "frontend/src/components/SelectionActionBar.tsx",
+          "operation": "create",
+          "description": "Create a floating action bar component that appears when items are selected. Include Download, Share (copy link), Copy, and Delete buttons. Download triggers file downloads using ExternalBlob.getBytes() or direct URLs. Share copies a shareable link/identifier to the clipboard. Delete shows a confirmation dialog before calling the backend removeFileReference method for each selected item. Use the blob-storage component for file access. Verify the component's usage instructions before implementing."
+        },
+        {
+          "path": "frontend/src/hooks/useMultiSelect.ts",
+          "operation": "create",
+          "description": "Create a custom hook that manages multi-select state, selected items, and selection actions (select all, clear selection, toggle item). Return functions for entering/exiting multi-select mode and the current selection state."
+        },
+        {
+          "path": "frontend/src/components/DeleteConfirmationDialog.tsx",
+          "operation": "create",
+          "description": "Create a confirmation dialog component that prompts the user before deleting selected media files. Display the count of items to be deleted and provide Cancel and Delete buttons."
+        },
+        {
+          "path": "frontend/src/components/PhotoGalleryView.tsx",
+          "operation": "modify",
+          "description": "Wire the SelectionActionBar into the gallery view. Show it when items are selected and hide it when selection is cleared. Ensure the action bar integrates with the MediaGrid selection state."
+        }
+      ]
+    },
+    {
+      "id": "REQ-5",
+      "summary": "Display storage usage indicator (used vs. 1000 TB total) in settings or profile menu styled like Google Photos",
+      "acceptanceCriteria": [
+        "Storage bar shows used space and total 1000 TB",
+        "The indicator is visible in the settings or profile panel",
+        "Progress bar color changes as usage increases"
+      ],
+      "file_operations": [
+        {
+          "path": "frontend/src/components/StorageUsageIndicator.tsx",
+          "operation": "create",
+          "description": "Create a storage usage component that fetches the user's quota and calculates used space from uploaded files. Display a progress bar showing used vs. 1000 TB total with color changes as usage increases (green < 50%, yellow 50–80%, red > 80%). Format bytes in human-readable units (TB, GB, MB). Use the backend getPerUserQuota and listUserFiles methods."
+        },
+        {
+          "path": "frontend/src/components/SettingsPanel.tsx",
+          "operation": "modify",
+          "description": "Replace or extend the existing settings panel to include the StorageUsageIndicator component. Retain the password change and logout functionality but add the storage usage bar at the top of the panel. Style the panel to match the Google Photos theme with rounded corners and subtle shadows."
+        },
+        {
+          "path": "frontend/src/hooks/useStorageUsage.ts",
+          "operation": "create",
+          "description": "Create a custom hook that fetches the user's file list and calculates total storage usage. Return used bytes, total quota (1000 TB), and usage percentage. Use React Query to cache the results and invalidate when files are uploaded or deleted."
+        }
+      ]
+    },
+    {
+      "id": "REQ-7",
+      "summary": "Apply clean, light Google Photos-inspired visual theme with white backgrounds, rounded cards, subtle shadows, Roboto font, pink/teal accents, and smooth animations",
+      "acceptanceCriteria": [
+        "Background is white or very light grey",
+        "Thumbnails have rounded corners and lift on hover",
+        "Accent color is used for selection indicators and action buttons",
+        "Typography is clean and modern sans-serif",
+        "Transitions on hover and selection are smooth (150–250ms)"
+      ],
+      "file_operations": [
+        {
+          "path": "frontend/src/index.css",
+          "operation": "modify",
+          "description": "Update global styles to apply a Google Photos-inspired theme. Change the background to white or very light grey. Update color tokens to use pink/teal accent colors. Add hover lift effects (translateY, shadow) for thumbnails with 150–250ms transitions. Ensure smooth animations on interactive elements. Import Roboto or similar sans-serif font if not already available."
+        },
+        {
+          "path": "frontend/tailwind.config.js",
+          "operation": "modify",
+          "description": "Extend Tailwind configuration to include Google Photos theme colors (pink, teal accents), rounded corner utilities, and custom box shadows for cards and hover effects. Add transition duration utilities for smooth animations (150ms, 250ms)."
+        },
+        {
+          "path": "frontend/src/components/MediaGrid.tsx",
+          "operation": "modify",
+          "description": "Apply rounded corners to thumbnails. Add hover effects that lift thumbnails with a subtle shadow and scale transform. Use pink/teal accent colors for selection indicators (checkmark overlays). Ensure transitions are smooth (150–250ms)."
+        },
+        {
+          "path": "frontend/src/components/TopNavigationBar.tsx",
+          "operation": "modify",
+          "description": "Style the top navigation bar with a white background, subtle bottom shadow, and clean typography. Use pink/teal accents for the logo and active elements. Ensure rounded corners on the search input."
+        },
+        {
+          "path": "frontend/src/components/SelectionActionBar.tsx",
+          "operation": "modify",
+          "description": "Style the action bar with rounded corners, white background, subtle shadow, and pink/teal accent colors for action buttons. Add smooth hover transitions."
+        }
+      ]
+    }
+  ]
+}

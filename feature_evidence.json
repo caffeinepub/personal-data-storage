@@ -1,0 +1,137 @@
+{
+  "kind": "feature_evidence_report",
+  "features": [
+    {
+      "featureId": "feature-redesign-the-app-ui-to-look-and-feel-like-google-photos-full-width-responsive-photo-video-grid-gallery-date-grouped-sections-a-top-navigation-bar-with-logo-and-search-and-a-bottom-or-side-navigation-for-albums-library-and-explore-views",
+      "featureTitle": "Redesign the app UI to look and feel like Google Photos: full-width responsive photo/video grid gallery, date-grouped sections, a top navigation bar with logo and search, and a bottom or side navigation for Albums, Library, and Explore views.",
+      "files": [
+        "frontend/src/App.tsx",
+        "frontend/src/components/MediaGrid.tsx",
+        "frontend/src/components/PhotoGalleryView.tsx",
+        "frontend/src/components/SectionNavigation.tsx",
+        "frontend/src/components/TopNavigationBar.tsx"
+      ],
+      "components": [
+        "blob-storage@4.0.0",
+        "core-infrastructure@1.0.2",
+        "shadcn-ui@1.0.0",
+        "build-template-react@1.0.0",
+        "initial-app@1.0.0",
+        "github-export-icp-cli@1.0.0",
+        "authorization@4.0.0"
+      ],
+      "testIds": [
+        "REQ-1"
+      ],
+      "confidence": "high"
+    },
+    {
+      "featureId": "feature-support-photo-and-video-file-uploads-when-a-file-is-selected-show-an-upload-progress-indicator-display-uploaded-media-as-thumbnails-in-the-gallery-grid",
+      "featureTitle": "Support photo and video file uploads. When a file is selected, show an upload progress indicator. Display uploaded media as thumbnails in the gallery grid.",
+      "files": [
+        "frontend/src/components/MediaUploadButton.tsx",
+        "frontend/src/components/PhotoGalleryView.tsx"
+      ],
+      "components": [
+        "blob-storage@4.0.0",
+        "core-infrastructure@1.0.2",
+        "shadcn-ui@1.0.0",
+        "build-template-react@1.0.0",
+        "initial-app@1.0.0",
+        "github-export-icp-cli@1.0.0",
+        "authorization@4.0.0"
+      ],
+      "testIds": [
+        "REQ-2"
+      ],
+      "confidence": "high"
+    },
+    {
+      "featureId": "feature-when-a-photo-or-video-thumbnail-is-clicked-open-a-full-screen-lightbox-modal-viewer-with-navigation-arrows-previous-next-the-file-name-date-and-size-displayed-videos-should-be-playable-inline",
+      "featureTitle": "When a photo or video thumbnail is clicked, open a full-screen lightbox/modal viewer with navigation arrows (previous/next), the file name, date, and size displayed. Videos should be playable inline.",
+      "files": [
+        "frontend/src/components/MediaGrid.tsx",
+        "frontend/src/components/MediaLightbox.tsx"
+      ],
+      "components": [
+        "blob-storage@4.0.0",
+        "core-infrastructure@1.0.2",
+        "shadcn-ui@1.0.0",
+        "build-template-react@1.0.0",
+        "initial-app@1.0.0",
+        "github-export-icp-cli@1.0.0",
+        "authorization@4.0.0"
+      ],
+      "testIds": [
+        "REQ-3"
+      ],
+      "confidence": "high"
+    },
+    {
+      "featureId": "feature-add-a-multi-select-mode-to-the-gallery-when-one-or-more-items-are-selected-show-a-contextual-action-bar-with-download-share-copy-shareable-link-copy-and-delete-buttons-that-apply-to-all-selected-items",
+      "featureTitle": "Add a multi-select mode to the gallery. When one or more items are selected, show a contextual action bar with Download, Share (copy shareable link), Copy, and Delete buttons that apply to all selected items.",
+      "files": [
+        "frontend/src/components/MediaGrid.tsx",
+        "frontend/src/components/PhotoGalleryView.tsx",
+        "frontend/src/components/SelectionActionBar.tsx"
+      ],
+      "components": [
+        "blob-storage@4.0.0",
+        "core-infrastructure@1.0.2",
+        "shadcn-ui@1.0.0",
+        "build-template-react@1.0.0",
+        "initial-app@1.0.0",
+        "github-export-icp-cli@1.0.0",
+        "authorization@4.0.0"
+      ],
+      "testIds": [
+        "REQ-4"
+      ],
+      "confidence": "high"
+    },
+    {
+      "featureId": "feature-display-a-storage-usage-indicator-used-vs-1000-tb-total-in-the-app-accessible-from-a-settings-or-profile-menu-style-it-to-match-the-google-photos-look",
+      "featureTitle": "Display a storage usage indicator (used vs. 1000 TB total) in the app, accessible from a settings or profile menu. Style it to match the Google Photos look.",
+      "files": [
+        "frontend/src/components/SettingsPanel.tsx"
+      ],
+      "components": [
+        "blob-storage@4.0.0",
+        "core-infrastructure@1.0.2",
+        "shadcn-ui@1.0.0",
+        "build-template-react@1.0.0",
+        "initial-app@1.0.0",
+        "github-export-icp-cli@1.0.0",
+        "authorization@4.0.0"
+      ],
+      "testIds": [
+        "REQ-5"
+      ],
+      "confidence": "high"
+    },
+    {
+      "featureId": "feature-apply-a-clean-light-google-photos-inspired-visual-theme-white-backgrounds-rounded-cards-subtle-shadows-the-roboto-or-similar-sans-serif-font-pink-teal-accent-colors-and-smooth-hover-transition-animations-on-gallery-items",
+      "featureTitle": "Apply a clean, light Google Photos-inspired visual theme: white backgrounds, rounded cards, subtle shadows, the Roboto or similar sans-serif font, pink/teal accent colors, and smooth hover/transition animations on gallery items.",
+      "files": [
+        "frontend/src/components/MediaGrid.tsx",
+        "frontend/src/components/SelectionActionBar.tsx",
+        "frontend/src/components/TopNavigationBar.tsx",
+        "frontend/src/index.css",
+        "frontend/tailwind.config.js"
+      ],
+      "components": [
+        "blob-storage@4.0.0",
+        "core-infrastructure@1.0.2",
+        "shadcn-ui@1.0.0",
+        "build-template-react@1.0.0",
+        "initial-app@1.0.0",
+        "github-export-icp-cli@1.0.0",
+        "authorization@4.0.0"
+      ],
+      "testIds": [
+        "REQ-7"
+      ],
+      "confidence": "high"
+    }
+  ]
+}
